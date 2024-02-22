@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.rede_social.memora.dto.PostsDto;
+import com.rede_social.memora.dto.SubjectDto;
 import com.rede_social.memora.model.Subject;
 import com.rede_social.memora.repository.SubjectRepository;
+import com.rede_social.memora.service.SubjectService;
 
 import jakarta.validation.Valid;
 
@@ -29,17 +32,19 @@ import jakarta.validation.Valid;
 public class SubjectController {
     @Autowired
     private SubjectRepository subjectRepository;
+
+    @Autowired
+    private SubjectService subjectService;
     
     @GetMapping
-    public ResponseEntity<List<Subject>> getAll(){
-        return ResponseEntity.ok(subjectRepository.findAll());
+    public ResponseEntity<List<SubjectDto>> getAll(){
+        return ResponseEntity.ok(subjectService.findAll());
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<Subject> getById(@PathVariable Long id){
-        return subjectRepository.findById(id)
-            .map(resposta -> ResponseEntity.ok(resposta))
-            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<SubjectDto> getById(@PathVariable Long id){
+        return subjectService.findById(id).map(subjectDto -> ResponseEntity.ok(subjectDto))
+        .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     
     @GetMapping("/description/{description}")

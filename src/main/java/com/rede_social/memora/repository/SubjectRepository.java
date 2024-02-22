@@ -9,4 +9,5 @@ import com.rede_social.memora.model.Subject;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long>{
     public List<Subject> findAllByDescriptionContainingIgnoreCase(@Param("description") String description);
+
 }

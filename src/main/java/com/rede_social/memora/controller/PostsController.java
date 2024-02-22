@@ -1,7 +1,10 @@
 package com.rede_social.memora.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.PostsDto;
+import com.rede_social.memora.dto.SubjectDto;
 import com.rede_social.memora.model.Posts;
 import com.rede_social.memora.repository.PostsRepository;
 import com.rede_social.memora.repository.SubjectRepository;
@@ -41,19 +45,26 @@ public class PostsController {
     private SubjectRepository subjectRepository;
 
     @GetMapping(value = "/{id}")
-    public PostsDto findById(@PathVariable Long id){
-        return postsService.findById(id);
+    public ResponseEntity<PostsDto> getById(@PathVariable Long id){
+        return postsService.findById(id).map(postsDto -> ResponseEntity.ok(postsDto))
+        .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping
-    public ResponseEntity<List<Posts>> getAll(){
-        return ResponseEntity.ok(postsRepository.findAll());
+    public ResponseEntity<List<PostsDto>> getAll(){
+        return ResponseEntity.ok(postsService.findAll());
     }
 
     @GetMapping("/title/{title}")
-    public ResponseEntity<List<Posts>> getByTitle(@PathVariable String title){
-        return ResponseEntity.ok(postsRepository.findAllByTitleContainingIgnoreCase(title));
+    public ResponseEntity<List<PostsDto>> getByTitle(@PathVariable String title) {
+    List<PostsDto> postsDtoList = postsService.findAllByTitleContainingIgnoreCase(title);
+
+    if (!postsDtoList.isEmpty()) {
+        return ResponseEntity.ok(postsDtoList);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+    } //error timeout was reached
 
     @PostMapping
     public ResponseEntity<Posts> post(@Valid @RequestBody Posts posts){

@@ -8,5 +8,5 @@ import org.springframework.data.repository.query.Param;
 import com.rede_social.memora.model.Posts;
 
 public interface PostsRepository extends JpaRepository <Posts, Long>{
-    public List <Posts> findAllByTitleContainingIgnoreCase(@Param("title") String title);
+    List<Posts> findAllByTitleContainingIgnoreCase(@Param("title") String title);
 }
