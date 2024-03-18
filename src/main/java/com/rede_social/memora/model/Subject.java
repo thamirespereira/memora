@@ -26,7 +26,7 @@ public class Subject {
 	@NotNull(message = "O Atributo Descrição é obrigatório")
 	private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject", cascade = CascadeType.DETACH)
     @JsonIgnoreProperties("subject")
     private List<Posts> posts;
 }

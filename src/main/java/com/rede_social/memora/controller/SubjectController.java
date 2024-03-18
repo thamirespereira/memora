@@ -20,7 +20,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.PostsDto;
 import com.rede_social.memora.dto.SubjectDto;
+import com.rede_social.memora.model.Posts;
 import com.rede_social.memora.model.Subject;
+import com.rede_social.memora.repository.PostsRepository;
 import com.rede_social.memora.repository.SubjectRepository;
 import com.rede_social.memora.service.SubjectService;
 
@@ -35,6 +37,9 @@ public class SubjectController {
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private PostsRepository postsRepository;
     
     @GetMapping
     public ResponseEntity<List<SubjectDto>> getAll(){
@@ -71,11 +76,18 @@ public class SubjectController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        Optional<Subject> subject = subjectRepository.findById(id);
+        Optional<Subject> subjectOptional = subjectRepository.findById(id);
         
-        if(subject.isEmpty())
+        if(subjectOptional.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        
+
+            Subject subject = subjectOptional.get();
+            if (!subject.getPosts().isEmpty()) {
+                for (Posts post : subject.getPosts()) {
+                    post.setSubject(null);
+                }
+                postsRepository.saveAll(subject.getPosts());
+            }
             subjectRepository.deleteById(id);              
     }
 

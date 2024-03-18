@@ -1,11 +1,7 @@
 package com.rede_social.memora.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.PostsDto;
-import com.rede_social.memora.dto.SubjectDto;
 import com.rede_social.memora.model.Posts;
 import com.rede_social.memora.repository.PostsRepository;
 import com.rede_social.memora.repository.SubjectRepository;
@@ -64,7 +59,7 @@ public class PostsController {
     } else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    } //error timeout was reached
+    } 
 
     @PostMapping
     public ResponseEntity<Posts> post(@Valid @RequestBody Posts posts){
