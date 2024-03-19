@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -38,4 +39,8 @@ public class Posts {
     @ManyToOne
     @JsonIgnoreProperties("posts")
     private Subject subject;
+
+    @ManyToOne
+	@JsonIgnoreProperties("posts")
+    private User user;
 }
