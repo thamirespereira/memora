@@ -17,7 +17,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "tb_users")
@@ -48,4 +50,15 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("user")
 	private List<Posts> posts;
+
+	public User(Long id, String name, String username, String password, String email, String image) {
+		this.id = id;
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.image = image;
+	}
+
+	
 }
