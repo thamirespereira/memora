@@ -27,6 +27,8 @@ public class PostsService {
         postsDto.setTitle(posts.getTitle());
         postsDto.setBody(posts.getBody());
         postsDto.setPostDate(posts.getPostDate());
+        postsDto.setSubject(posts.getSubject());
+        postsDto.setUser(posts.getUser());
      
         return postsDto;
     }

@@ -1,4 +1,4 @@
-package com.rede_social.security;
+package com.rede_social.memora.security;
 
 import java.security.Key;
 import java.util.Date;

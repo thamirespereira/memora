@@ -29,4 +29,28 @@ public class Subject {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject", cascade = CascadeType.DETACH)
     @JsonIgnoreProperties("subject")
     private List<Posts> posts;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Posts> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Posts> posts) {
+        this.posts = posts;
+    }
 }

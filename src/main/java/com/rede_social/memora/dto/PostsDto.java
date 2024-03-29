@@ -3,6 +3,7 @@ package com.rede_social.memora.dto;
 import java.time.LocalDateTime;
 import com.rede_social.memora.model.Posts;
 import com.rede_social.memora.model.Subject;
+import com.rede_social.memora.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class PostsDto {
     private String body;
     private LocalDateTime postDate;
     private Subject subject;
+    private User user;
 
     public PostsDto(Posts posts){
         id = posts.getId();
@@ -25,6 +27,7 @@ public class PostsDto {
         body = posts.getBody();
         postDate = posts.getPostDate();
         subject = posts.getSubject();
+        user = posts.getUser();
     }
 
 }

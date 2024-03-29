@@ -1,4 +1,4 @@
-package com.rede_social.security;
+package com.rede_social.memora.security;
 
 import java.util.Collection;
 import java.util.List;

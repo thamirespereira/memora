@@ -81,13 +81,6 @@ public class SubjectController {
         if(subjectOptional.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-            Subject subject = subjectOptional.get();
-            if (!subject.getPosts().isEmpty()) {
-                for (Posts post : subject.getPosts()) {
-                    post.setSubject(null);
-                }
-                postsRepository.saveAll(subject.getPosts());
-            }
             subjectRepository.deleteById(id);              
     }
 

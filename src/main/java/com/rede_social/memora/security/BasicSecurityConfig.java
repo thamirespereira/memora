@@ -1,4 +1,4 @@
-package com.rede_social.security;
+package com.rede_social.memora.security;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class BasicSecurityConfig {
 
-    @Autowired
+    @Autowired 
     private JwtAuthFilter authFilter;
 
     @Bean
