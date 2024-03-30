@@ -30,7 +30,7 @@ public class UserService {
 
 	public Optional<User> createUser(User user) {
 
-		if (userRepository.findByUsername(user.getUsername()).isPresent())
+		if (userRepository.findByUser(user.getUser()).isPresent())
 			return Optional.empty();
 
 		user.setPassword(encryptPassword(user.getPassword()));
@@ -42,7 +42,7 @@ public class UserService {
 		
 		if(userRepository.findById(user.getId()).isPresent()) {
 
-			Optional<User> searchUser = userRepository.findByUsername(user.getUsername());
+			Optional<User> searchUser = userRepository.findByUser(user.getUser());
 
 			if ( (searchUser.isPresent()) && ( searchUser.get().getId() != user.getId()))
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
@@ -60,7 +60,7 @@ public class UserService {
 	public Optional<UserLogin> authenticateUser(Optional<UserLogin> userLogin) {
 
         // Gera o Objeto de autenticação
-		var credentials = new UsernamePasswordAuthenticationToken(userLogin.get().getUsername(), userLogin.get().getPassword());
+		var credentials = new UsernamePasswordAuthenticationToken(userLogin.get().getUser(), userLogin.get().getPassword());
 		
         // Autentica o user
 		Authentication authentication = authenticationManager.authenticate(credentials);
@@ -69,7 +69,7 @@ public class UserService {
 		if (authentication.isAuthenticated()) {
 
             // Busca os dados do usuário
-			Optional<User> user = userRepository.findByUsername(userLogin.get().getUsername());
+			Optional<User> user = userRepository.findByUser(userLogin.get().getUser());
 
             // Se o usuário foi encontrado
 			if (user.isPresent()) {
@@ -79,7 +79,7 @@ public class UserService {
                 userLogin.get().setName(user.get().getName());
                 userLogin.get().setEmail(user.get().getEmail());
                 userLogin.get().setImage(user.get().getImage());
-                userLogin.get().setToken(generateToken(userLogin.get().getUsername()));
+                userLogin.get().setToken(generateToken(userLogin.get().getUser()));
                 userLogin.get().setPassword("");
 
                 // Retorna o Objeto preenchido

@@ -18,11 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.rede_social.memora.dto.PostsDto;
 import com.rede_social.memora.dto.SubjectDto;
-import com.rede_social.memora.model.Posts;
 import com.rede_social.memora.model.Subject;
-import com.rede_social.memora.repository.PostsRepository;
 import com.rede_social.memora.repository.SubjectRepository;
 import com.rede_social.memora.service.SubjectService;
 
@@ -37,9 +34,6 @@ public class SubjectController {
 
     @Autowired
     private SubjectService subjectService;
-
-    @Autowired
-    private PostsRepository postsRepository;
     
     @GetMapping
     public ResponseEntity<List<SubjectDto>> getAll(){

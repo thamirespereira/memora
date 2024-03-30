@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,9 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "tb_users")
@@ -32,9 +32,11 @@ public class User {
 	@NotNull(message = "O Atributo Nome é Obrigatório!")
 	private String name;
 
-	@NotNull(message = "O Atributo Usuário é Obrigatório!")
+	@Schema(description = "Nome de usuário")
+	@NotNull(message = "O Atributo Nome de Usuário é Obrigatório!")
 	@Size(max = 100, message = "O Nome de Usuário deve ter até 100 caracteres")
-	private String username;
+	@Column(name = "\"user\"")
+	private String user;
 
 	@NotBlank(message = "O Atributo Senha é Obrigatório!")
 	@Size(min = 8, message = "A Senha deve ter no mínimo 8 caracteres")
@@ -51,14 +53,16 @@ public class User {
 	@JsonIgnoreProperties("user")
 	private List<Posts> posts;
 
-	public User(Long id, String name, String username, String password, String email, String image) {
+	public User(Long id, String name, String user, String password, String email, String image) {
 		this.id = id;
 		this.name = name;
-		this.username = username;
+		this.user = user;
 		this.password = password;
 		this.email = email;
 		this.image = image;
 	}
 
-	
+	public User() {
+	}
+
 }
