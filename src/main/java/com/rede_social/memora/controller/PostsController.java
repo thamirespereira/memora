@@ -23,6 +23,7 @@ import com.rede_social.memora.repository.PostsRepository;
 import com.rede_social.memora.repository.SubjectRepository;
 import com.rede_social.memora.service.PostsService;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -62,8 +63,12 @@ public class PostsController {
     } 
 
     @PostMapping
+    @Transactional
     public ResponseEntity<Posts> post(@Valid @RequestBody Posts posts){
-        if(subjectRepository.existsById(posts.getSubject().getId()))
+        if (posts.getSubject() == null) 
+            return ResponseEntity.status(HttpStatus.CREATED).body(postsRepository.save(posts));
+        
+        if(posts.getSubject() != null && subjectRepository.existsById(posts.getSubject().getId()))
         return ResponseEntity.status(HttpStatus.CREATED).body(postsRepository.save(posts));
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe!", null);
@@ -71,15 +76,13 @@ public class PostsController {
 
     @PutMapping
     public ResponseEntity<Posts> put(@Valid @RequestBody Posts posts){
-        if (postsRepository.existsById(posts.getId())){
-            if(subjectRepository.existsById(posts.getSubject().getId()))
+        if (postsRepository.existsById(posts.getId())) {
             return ResponseEntity.status(HttpStatus.OK).body(postsRepository.save(posts));
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe!", null);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
+    
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete (@PathVariable Long id){
