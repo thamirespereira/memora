@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +34,6 @@ public class User {
 	@Schema(description = "Nome de usuário")
 	@NotNull(message = "O Atributo Nome de Usuário é Obrigatório!")
 	@Size(max = 100, message = "O Nome de Usuário deve ter até 100 caracteres")
-	@Column(name = "\"user\"")
 	private String user;
 
 	@NotBlank(message = "O Atributo Senha é Obrigatório!")

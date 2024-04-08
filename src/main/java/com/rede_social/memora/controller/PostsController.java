@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,7 +77,9 @@ public class PostsController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<Posts> put(@Valid @RequestBody Posts posts){
+
         if (postsRepository.existsById(posts.getId())) {
             return ResponseEntity.status(HttpStatus.OK).body(postsRepository.save(posts));
         } else {
@@ -86,11 +90,23 @@ public class PostsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete (@PathVariable Long id){
-        Optional <Posts> posts = postsRepository.findById(id);
 
-        if(posts.isEmpty()){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        
+        Optional <Posts> postsOptional = postsRepository.findById(id);
+
+        if(postsOptional.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        Posts post = postsOptional.get();
+        String postOwnerUsername = post.getUser().getUser();
+
+        if (!currentUsername.equals(postOwnerUsername)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir este post.");
+        }
+
         postsRepository.deleteById(id);
     }
 }

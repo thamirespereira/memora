@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.UserLogin;
+import com.rede_social.memora.model.Posts;
 import com.rede_social.memora.model.User;
 import com.rede_social.memora.repository.UserRepository;
 import com.rede_social.memora.service.UserService;
@@ -80,11 +83,21 @@ public class UserController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		Optional<User> user = userRepository.findById(id);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
 
-		if (user.isEmpty())
+		Optional<User> userOptional = userRepository.findById(id);
+
+		if (userOptional.isEmpty())
 
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+		User user = userOptional.get();
+        String currentUser = user.getUser();
+
+        if (!currentUsername.equals(currentUser)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir este usuário.");
+        }
 
 		userRepository.deleteById(id);
 
