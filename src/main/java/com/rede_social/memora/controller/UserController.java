@@ -55,20 +55,6 @@ public class UserController {
 			.map(response -> ResponseEntity.ok(response))
 			.orElseThrow(()->new UserNotFoundException("Usuário não encontrado."));
 	}
-
-	@GetMapping("/{user}")
-	public ResponseEntity<User> getByUser(@PathVariable String user) {
-		Optional<User> userOptional = userRepository.findByUser(user);
-        
-        if (userOptional.isPresent()) {
-            User username = userOptional.get();
-            return ResponseEntity.ok(username);
-        } else {
-			throw new UserNotFoundException("Usuário não encontrado.");}
-		/*return userRepository.findByUser(user)
-			.map(response -> ResponseEntity.ok(response))
-			.orElseThrow(()->new UserNotFoundException("Usuário não encontrado."));*/
-	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserLogin> authenticateUser(@RequestBody Optional<UserLogin> userLogin){
