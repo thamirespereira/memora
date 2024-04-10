@@ -55,6 +55,13 @@ public class UserController {
 			.map(response -> ResponseEntity.ok(response))
 			.orElseThrow(()->new UserNotFoundException("Usuário não encontrado."));
 	}
+
+	@GetMapping("/username/{user}")
+	public ResponseEntity<User> getByUser(@PathVariable String user) {
+		return userRepository.findByUser(user)
+			.map(response -> ResponseEntity.ok(response))
+			.orElseThrow(()->new UserNotFoundException("Usuário não encontrado."));
+	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserLogin> authenticateUser(@RequestBody Optional<UserLogin> userLogin){
