@@ -1,4 +1,4 @@
-package com.rede_social.memora.configuration;
+package com.rede_social.memora.configuration.swagger;
 
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;

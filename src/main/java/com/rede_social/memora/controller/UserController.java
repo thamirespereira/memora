@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.UserLogin;
-import com.rede_social.memora.model.Posts;
-import com.rede_social.memora.model.User;
+import com.rede_social.memora.model.posts.Posts;
+import com.rede_social.memora.model.user.User;
+import com.rede_social.memora.model.user.exceptions.DeleteUserIsForbiddenException;
+import com.rede_social.memora.model.user.exceptions.UserNotFoundException;
 import com.rede_social.memora.repository.UserRepository;
 import com.rede_social.memora.service.UserService;
 
@@ -50,7 +52,7 @@ public class UserController {
 	public ResponseEntity<User> getById(@PathVariable Long id) {
 		return userRepository.findById(id)
 			.map(response -> ResponseEntity.ok(response))
-			.orElse(ResponseEntity.notFound().build());
+			.orElseThrow(()->new UserNotFoundException("Usuário não encontrado."));
 	}
 	
 	@PostMapping("/login")
@@ -76,7 +78,7 @@ public class UserController {
 		
 		return userService.updateUser(user)
 			.map(response -> ResponseEntity.status(HttpStatus.OK).body(response))
-			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+			.orElseThrow(()->new UserNotFoundException("Usuário não encontrado."));
 		
 	}
 
@@ -90,13 +92,13 @@ public class UserController {
 
 		if (userOptional.isEmpty())
 
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			throw new UserNotFoundException("Usuário não encontrado.");
 
 		User user = userOptional.get();
         String currentUser = user.getUser();
 
         if (!currentUsername.equals(currentUser)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir este usuário.");
+            throw new DeleteUserIsForbiddenException( "Você não tem permissão para excluir este usuário.");
         }
 
 		userRepository.deleteById(id);

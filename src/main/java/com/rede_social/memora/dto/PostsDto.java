@@ -1,9 +1,10 @@
 package com.rede_social.memora.dto;
 
 import java.time.LocalDateTime;
-import com.rede_social.memora.model.Posts;
-import com.rede_social.memora.model.Subject;
-import com.rede_social.memora.model.User;
+
+import com.rede_social.memora.model.posts.Posts;
+import com.rede_social.memora.model.subject.Subject;
+import com.rede_social.memora.model.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

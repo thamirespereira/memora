@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.rede_social.memora.model.Posts;
+import com.rede_social.memora.model.posts.Posts;
 
 public interface PostsRepository extends JpaRepository <Posts, Long>{
     List<Posts> findAllByTitleContainingIgnoreCase(@Param("title") String title);

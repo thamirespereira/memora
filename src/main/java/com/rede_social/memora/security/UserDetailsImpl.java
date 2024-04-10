@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.rede_social.memora.model.User;
+import com.rede_social.memora.model.user.User;
 
 public class UserDetailsImpl implements UserDetails{
     private static final long serialVersionUID = 1L;

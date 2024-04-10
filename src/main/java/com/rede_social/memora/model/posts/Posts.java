@@ -1,4 +1,4 @@
-package com.rede_social.memora.model;
+package com.rede_social.memora.model.posts;
 
 import java.time.LocalDateTime;
 
@@ -6,6 +6,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rede_social.memora.model.subject.Subject;
+import com.rede_social.memora.model.user.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

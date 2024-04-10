@@ -1,8 +1,9 @@
-package com.rede_social.memora.model;
+package com.rede_social.memora.model.user;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rede_social.memora.model.posts.Posts;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;

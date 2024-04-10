@@ -1,8 +1,10 @@
-package com.rede_social.memora.model;
+package com.rede_social.memora.model.subject;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rede_social.memora.model.posts.Posts;
+import com.rede_social.memora.model.user.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -10,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +32,10 @@ public class Subject {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject", cascade = CascadeType.DETACH)
     @JsonIgnoreProperties("subject")
     private List<Posts> posts;
+
+    @ManyToOne
+	@JsonIgnoreProperties("subject")
+    private User user;
 
     public Long getId() {
         return id;
@@ -52,5 +59,13 @@ public class Subject {
 
     public void setPosts(List<Posts> posts) {
         this.posts = posts;
+    }
+
+    public User getUser(User user){
+        return user;
+    }
+
+    public void SetUser(User user){
+        this.user = user;
     }
 }

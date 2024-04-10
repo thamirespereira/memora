@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.UserLogin;
-import com.rede_social.memora.model.User;
+import com.rede_social.memora.model.user.User;
 import com.rede_social.memora.repository.UserRepository;
 import com.rede_social.memora.security.JwtService;
 

@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.PostsDto;
-import com.rede_social.memora.model.Posts;
+import com.rede_social.memora.model.posts.Posts;
+import com.rede_social.memora.model.posts.exceptions.DeletePostIsForbiddenException;
+import com.rede_social.memora.model.posts.exceptions.PostNotFoundException;
 import com.rede_social.memora.repository.PostsRepository;
 import com.rede_social.memora.repository.SubjectRepository;
 import com.rede_social.memora.service.PostsService;
@@ -45,7 +47,7 @@ public class PostsController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostsDto> getById(@PathVariable Long id){
         return postsService.findById(id).map(postsDto -> ResponseEntity.ok(postsDto))
-        .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        .orElseThrow(()-> new PostNotFoundException("Post não encontrado."));
     }
 
     @GetMapping
@@ -60,7 +62,7 @@ public class PostsController {
     if (!postsDtoList.isEmpty()) {
         return ResponseEntity.ok(postsDtoList);
     } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        throw new PostNotFoundException("Post não encontrado.");
     }
     } 
 
@@ -83,7 +85,7 @@ public class PostsController {
         if (postsRepository.existsById(posts.getId())) {
             return ResponseEntity.status(HttpStatus.OK).body(postsRepository.save(posts));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new PostNotFoundException("Post não encontrado.");
         }
     }
     
@@ -97,14 +99,14 @@ public class PostsController {
         Optional <Posts> postsOptional = postsRepository.findById(id);
 
         if(postsOptional.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new PostNotFoundException("Post não encontrado.");
         }
 
         Posts post = postsOptional.get();
         String postOwnerUsername = post.getUser().getUser();
 
         if (!currentUsername.equals(postOwnerUsername)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir este post.");
+            throw new DeletePostIsForbiddenException ("Você não tem permissão para excluir este post.");
         }
 
         postsRepository.deleteById(id);

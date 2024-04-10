@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rede_social.memora.dto.PostsDto;
-import com.rede_social.memora.model.Posts;
+import com.rede_social.memora.model.posts.Posts;
 import com.rede_social.memora.repository.PostsRepository;
 import java.util.List;
 import java.util.Optional;

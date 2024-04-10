@@ -17,7 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.rede_social.memora.model.User;
+import com.rede_social.memora.model.user.User;
 import com.rede_social.memora.repository.UserRepository;
 import com.rede_social.memora.service.UserService;
 

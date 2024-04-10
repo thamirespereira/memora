@@ -2,8 +2,8 @@ package com.rede_social.memora.dto;
 
 import java.util.List;
 
-import com.rede_social.memora.model.Posts;
-import com.rede_social.memora.model.Subject;
+import com.rede_social.memora.model.posts.Posts;
+import com.rede_social.memora.model.subject.Subject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

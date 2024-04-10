@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rede_social.memora.dto.SubjectDto;
-import com.rede_social.memora.model.Subject;
+import com.rede_social.memora.model.posts.Posts;
+import com.rede_social.memora.model.subject.Subject;
+import com.rede_social.memora.model.subject.exceptions.DeleteSubjectIsForbiddenException;
+import com.rede_social.memora.model.subject.exceptions.SubjectNotFoundException;
 import com.rede_social.memora.repository.SubjectRepository;
 import com.rede_social.memora.service.SubjectService;
 
@@ -43,7 +48,7 @@ public class SubjectController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<SubjectDto> getById(@PathVariable Long id){
         return subjectService.findById(id).map(subjectDto -> ResponseEntity.ok(subjectDto))
-        .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        .orElseThrow(()-> new SubjectNotFoundException("Tema não encontrado."));
     }
     
     @GetMapping("/description/{description}")
@@ -64,16 +69,26 @@ public class SubjectController {
         return subjectRepository.findById(subject.getId())
             .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
             .body(subjectRepository.save(subject)))
-            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+            .orElseThrow(()-> new SubjectNotFoundException("Tema não encontrado."));
     }
     
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
         Optional<Subject> subjectOptional = subjectRepository.findById(id);
         
         if(subjectOptional.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new SubjectNotFoundException("Tema não encontrado.");
+
+        Subject subject  = subjectOptional.get();
+        String subjectOwnerUsername = subject.getUser().getUser();
+
+        if (!currentUsername.equals(subjectOwnerUsername)) {
+            throw new DeleteSubjectIsForbiddenException( "Você não tem permissão para excluir este tema.");
+        }
 
             subjectRepository.deleteById(id);              
     }

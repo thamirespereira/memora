@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rede_social.memora.dto.SubjectDto;
-import com.rede_social.memora.model.Subject;
+import com.rede_social.memora.model.subject.Subject;
 import com.rede_social.memora.repository.SubjectRepository;
 
 @Service
